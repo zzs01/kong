@@ -189,6 +189,31 @@ function smtg_queryPrize(timeout = 0){
               }
               //兑换1000京豆
               if ($.totalBlue > $.blueCost) {
+               function startTime(){
+                    let targetTimezone = -8 ; // 目标时区，东9区
+                    let _dif = new Date().getTimezoneOffset();   // 当前时区与中时区时差，以min为维度
+                    // 本地时区时间 + 时差  = 中时区时间
+                    // 目标时区时间 + 时差 = 中时区时间
+                    // 目标时区时间 = 本地时区时间 + 本地时区时差 - 目标时区时差
+                    let east8time = new Date().getTime() + _dif * 60 * 1000 - (targetTimezone * 60 * 60 * 1000) // 东8区时间
+                    let today=new Date(east8time);
+                    const start_run = new Date(new Date().toLocaleDateString());
+                    start_run.setTime(start_run.getTime() + 3600 * 1000 * 24 * 1);
+                    let wait_time = start_run - today;
+                    return wait_time;
+                  }
+
+                function sleep(delay)
+                {
+                  let start = new Date().getTime();
+                  while (new Date().getTime() < start + delay);
+                }
+                waiting_time = startTime()
+
+                if (waiting_time <= 300000) {
+                  console.log("检测到离零点只有不到五分钟，脚本将等待" + waiting_time / 1000 + "s，到零点再执行");
+                  sleep(waiting_time);
+                }
                 await smtg_obtainPrize(prizeList[1].prizeId);
               } else {
                 console.log(`兑换失败,您目前蓝币${$.totalBlue}个,不足以兑换${$.title}所需的${$.blueCost}个`);
