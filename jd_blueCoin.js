@@ -199,6 +199,31 @@ function smtg_queryPrize(timeout = 0){
                 console.log(`查询换${prizeList[0].title}ID成功，ID:${prizeList[0].prizeId}`)
                 $.title = prizeList[0].title;
                 $.blueCost = prizeList[0].blueCost;
+                function startTime(){
+                    let targetTimezone = -8 ; // 目标时区，东9区
+                    let _dif = new Date().getTimezoneOffset();   // 当前时区与中时区时差，以min为维度
+                    // 本地时区时间 + 时差  = 中时区时间
+                    // 目标时区时间 + 时差 = 中时区时间
+                    // 目标时区时间 = 本地时区时间 + 本地时区时差 - 目标时区时差
+                    let east8time = new Date().getTime() + _dif * 60 * 1000 - (targetTimezone * 60 * 60 * 1000) // 东8区时间
+                    let today=new Date(east8time);
+                    const start_run = new Date(new Date().toLocaleDateString());
+                    start_run.setTime(start_run.getTime() + 3600 * 1000 * 24 * 1);
+                    let wait_time = start_run - today;
+                    return wait_time;
+                  }
+
+                function sleep(delay)
+                {
+                  let start = new Date().getTime();
+                  while (new Date().getTime() < start + delay);
+                }
+                waiting_time = startTime()
+                console.log("执行时间距零点时间差值为：" + waiting_time)
+                if (waiting_time <= 300000) {
+                  console.log("检测到离零点只有不到五分钟，脚本将等待" + waiting_time / 1000 + "s，到零点再执行");
+                  sleep(waiting_time);
+                }
               } else {
                 console.log(`查询换万能的京豆ID失败`)
                 $.beanerr = `东哥今天不给换`;
@@ -265,31 +290,6 @@ function smtg_queryPrize(timeout = 0){
 //换京豆
 function smtg_obtainPrize(prizeId, timeout = 0) {
   //1000京豆，prizeId为4401379726
-   function startTime(){
-      let targetTimezone = -8 ; // 目标时区，东9区
-      let _dif = new Date().getTimezoneOffset();   // 当前时区与中时区时差，以min为维度
-      // 本地时区时间 + 时差  = 中时区时间
-      // 目标时区时间 + 时差 = 中时区时间
-      // 目标时区时间 = 本地时区时间 + 本地时区时差 - 目标时区时差
-      let east8time = new Date().getTime() + _dif * 60 * 1000 - (targetTimezone * 60 * 60 * 1000) // 东8区时间
-      let today=new Date(east8time);
-      const start_run = new Date(new Date().toLocaleDateString());
-      start_run.setTime(start_run.getTime() + 3600 * 1000 * 24 * 1);
-      let wait_time = start_run - today;
-      return wait_time;
-    }
-
-  function sleep(delay)
-  {
-    let start = new Date().getTime();
-    while (new Date().getTime() < start + delay);
-  }
-  waiting_time = startTime()
-  console.log("执行时间距零点时间差值为：" + waiting_time)
-  if (waiting_time <= 300000) {
-    console.log("检测到离零点只有不到五分钟，脚本将等待" + waiting_time / 1000 + "s，到零点再执行");
-    sleep(waiting_time);
-  }
   return new Promise((resolve) => {
     setTimeout( ()=>{
       let url = {
