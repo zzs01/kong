@@ -182,7 +182,7 @@ function smtg_queryPrize(timeout = 0){
                     let today=new Date(east8time);
                     const start_run = new Date(new Date().toLocaleDateString());
                     start_run.setTime(start_run.getTime() + 3600 * 1000 * 24 * 1);
-                    let wait_time = start_run - today;
+                    let wait_time = start_run - today + 10;
                     return wait_time;
                   }
 
