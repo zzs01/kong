@@ -1,8 +1,8 @@
 # File: .github/workflows/repo-sync.yml
 name: sync-zzs01-jd_scripts
 on:
-  schedule:
-    - cron: '1 * * * *'
+ # schedule:
+ #   - cron: '1 * * * *'
   workflow_dispatch:
   watch:
     types: started
